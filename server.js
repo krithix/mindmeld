@@ -72,6 +72,12 @@ io.on('connection', (socket) => {
         currentRooms[index].users.push(socket);
       }
     }
+    currentRooms.map((r, index) => {
+      if (r.room !== room && r.users.findIndex(u => u.id === socket.id) > 0) {
+        currentRooms[index].users.splice(r.users.findIndex(u => u.id === socket.id), 1);
+        console.log('removed ' + socket.id + ' from ' + r.room);
+      }
+    });
     updateRoomData(socket, room);   
   });
 
