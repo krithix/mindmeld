@@ -1,8 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-
 import socketIOClient from "socket.io-client";
-const socket = window.location.href.indexOf('localhost') > 0 ? socketIOClient('http://localhost:5000') : socketIOClient('https://playmindmeld.herokuapp.com');
 
 class Game extends React.Component {
   constructor(props) {
@@ -36,7 +34,7 @@ class Game extends React.Component {
 
   guess(e) {
     e.preventDefault();
-    socket.emit('guess', this.state.gameName, this.state.teamTurn, this.state.percent);
+    this.socket.emit('guess', this.state.gameName, this.state.teamTurn, this.state.percent);
   }
 
   peek(e) {
@@ -67,16 +65,17 @@ class Game extends React.Component {
   getNextPair(e) {
     e.preventDefault();
     this.setState({peek: false, guess: null, percent: 50, roomInit: false});
-    socket.emit('nextGame', this.state.gameName);
+    this.socket.emit('nextGame', this.state.gameName);
   }
 
   componentDidMount() {
     this.setState({isMounted: true, gameName: window.location.pathname.replace('/', '')});
-    socket.emit('join', this.state.gameName);
-  }
 
-  componentDidUpdate() {
-    socket.on('updatedRoomData', (data) => {
+    this.socket = window.location.href.indexOf('localhost') > 0 ? socketIOClient('http://localhost:5000') : socketIOClient('https://playmindmeld.herokuapp.com');
+
+    this.socket.emit('join', this.state.gameName);
+
+    this.socket.on('updatedRoomData', (data) => {
       if(this.state.isMounted) {
         this.setState(
           {
@@ -95,6 +94,14 @@ class Game extends React.Component {
       }
       this.peek();
     });
+
+    this.socket.on('reconnect', (data) => {
+      this.socket.emit('join', this.state.gameName);
+    });
+  }
+
+  componentDidUpdate() {
+    
   }
 
   componentWillUnmount() {
