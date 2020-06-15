@@ -4,7 +4,7 @@
 A networked implementation of the popular party game [Wavelength](https://www.wavelength.zone/) to play online together with family and friends over Zoom.
 
 ## How to play
-1. Head to [the website](https://playmindmeld.herokuapp.com) to generate a game
+1. Head to [the website](https://mindmeld.link/) to generate a game
 2. Have all participants open the game link in a browser
 3. The "psychic" (clue giver) for the blue team will click *peek* to see the target on the spectrum and provide a clue to their team
 4. The blue teammates will decide on a percentage on the slider and click guess. The game automatically allocates points for correct guesses
