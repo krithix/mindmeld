@@ -1,4 +1,4 @@
-# 🎮 Play online: https://playmindmeld.herokuapp.com
+# 🎮 Play online at [mindmeld.link](https://mindmeld.link/)
 
 ## What is this?
 A networked implementation of the popular party game [Wavelength](https://www.wavelength.zone/) to play online together with family and friends over Zoom.
