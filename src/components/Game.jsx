@@ -1,8 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-
-import socketIOClient from "socket.io-client";
-const socket = window.location.href.indexOf('localhost') > 0 ? socketIOClient('http://localhost:5000') : socketIOClient('https://playmindmeld.herokuapp.com');
+import * as io from 'socket.io-client';
 
 class Game extends React.Component {
   constructor(props) {
@@ -20,7 +18,6 @@ class Game extends React.Component {
       redPoints: 0,
       bluePoints: 0,
       roomInit: false,
-      isMounted: false
     };
 
     this.changePercent = this.changePercent.bind(this);
@@ -36,7 +33,7 @@ class Game extends React.Component {
 
   guess(e) {
     e.preventDefault();
-    socket.emit('guess', this.state.gameName, this.state.teamTurn, this.state.percent);
+    this.socket.emit('guess', this.state.gameName, this.state.teamTurn, this.state.percent);
   }
 
   peek(e) {
@@ -67,38 +64,39 @@ class Game extends React.Component {
   getNextPair(e) {
     e.preventDefault();
     this.setState({peek: false, guess: null, percent: 50, roomInit: false});
-    socket.emit('nextGame', this.state.gameName);
+    this.socket.emit('nextGame', this.state.gameName);
   }
 
   componentDidMount() {
     this.setState({isMounted: true, gameName: window.location.pathname.replace('/', '')});
-    socket.emit('join', this.state.gameName);
-  }
 
-  componentDidUpdate() {
-    socket.on('updatedRoomData', (data) => {
-      if(this.state.isMounted) {
-        this.setState(
-          {
-            pair: data.pair, 
-            teamTurn: data.teamTurn,
-            turnPoints: data.turnPoints,
-            bluePoints: data.bluePoints,
-            redPoints: data.redPoints,
-            peek: data.peek,
-            target: data.target,
-            guess: data.guess,
-            percent: 50,
-            roomInit: data.roomInit
-          }
-        );
-      }
+    const hostname = window.location.hostname;
+    const port = window.location.port === '3000' ? '5000' : '';
+    this.socket = io(`${hostname}:${port}/games`);
+
+    this.socket.emit('join', this.state.gameName);
+
+    this.socket.on('updatedRoomData', (data) => {
+      this.setState(
+        {
+          pair: data.pair, 
+          teamTurn: data.teamTurn,
+          turnPoints: data.turnPoints,
+          bluePoints: data.bluePoints,
+          redPoints: data.redPoints,
+          peek: data.peek,
+          target: data.target,
+          guess: data.guess,
+          percent: 50,
+          roomInit: data.roomInit
+        }
+      );
       this.peek();
     });
-  }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+    this.socket.on('reconnect', (data) => {
+      this.socket.emit('join', this.state.gameName);
+    });
   }
 
   render() {
