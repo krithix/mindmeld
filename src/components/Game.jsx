@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import socketIOClient from "socket.io-client";
+import * as io from "socket.io-client";
 
 class Game extends React.Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class Game extends React.Component {
   componentDidMount() {
     this.setState({isMounted: true, gameName: window.location.pathname.replace('/', '')});
 
-    this.socket = window.location.href.indexOf('localhost') > 0 ? socketIOClient('http://localhost:5000') : socketIOClient('https://playmindmeld.herokuapp.com');
+    this.socket = io(`${window.location.host}/games`);
 
     this.socket.emit('join', this.state.gameName);
 

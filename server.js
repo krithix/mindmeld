@@ -6,6 +6,7 @@ const socketio = require('socket.io');
 const PORT = process.env.PORT || 5000;
 var server = app.listen(PORT);
 const io = socketio.listen(server);
+const nsp = io.of('/games');
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/:game', function(req, res) {
@@ -17,7 +18,7 @@ const pairs = require('./data/pairs.json');
 var currentRooms = [];
 var roomData = {};
 
-io.on('connection', (socket) => {
+nsp.on('connection', (socket) => {
   function generatePair(playedGames) {
     var nextGame = Math.floor(Math.random() * 100);
     do {
@@ -34,7 +35,7 @@ io.on('connection', (socket) => {
   function updateRoomData(socket, room) {
     if (currentRooms.indexOf(room) > -1) {
       var currentRoomData = roomData[room];
-      io.in(room).emit('updatedRoomData', currentRoomData);
+      nsp.in(room).emit('updatedRoomData', currentRoomData);
     } else {
       console.log('trying to update room data for a nonexistent room!');
     }
@@ -117,9 +118,4 @@ io.on('connection', (socket) => {
       console.log('trying to guess in nonexistent room');
     }
   });
-
-  socket.on('disconnect', function() {
-    console.log(socket.id + ' disconnected');
-  });
 });
-
