@@ -123,9 +123,9 @@ class Game extends React.Component {
           <div className="target">
             {this.state.peek &&
               <div>
-                <div className="outer" style={{marginLeft: this.state.target-12+'%'}}></div>
-                <div className="middle" style={{marginLeft: this.state.target-7+'%'}}></div>
-                <div className="inner" style={{marginLeft: this.state.target-3+'%'}}></div>
+                <div className="outer" style={{marginLeft: `${this.state.target - 10.5}%`}}></div>
+                <div className="middle" style={{marginLeft: `${this.state.target - 5.5}%`}}></div>
+                <div className="inner" style={{marginLeft: `${this.state.target - 2.5}%`}}></div>
               </div>
             }
             <input type="range" min="1" max="100" value={this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
