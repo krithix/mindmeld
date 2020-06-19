@@ -219,20 +219,22 @@ button {
 
       &:hover {
         &::-webkit-slider-thumb {
-          background: rgba($color: #000, $alpha: 0.8);
+          background: #111;
         }
+      }
+
+      &::-webkit-slider-runnable-track {
+        z-index: 7;
       }
 
       &::-webkit-slider-thumb {
         appearance: none;
         width: 1.5%;
-        display: block;
         height: 29px;
-        background: rgba($color: #000, $alpha: 0.6);
+        background: #444;
         transition: all .5s ease;
         cursor: pointer;
         margin: -10px 0 0 0;
-        z-index: 60;
         box-shadow: 1px 1px #aaa;
         border: 1px solid rgba($color: #000, $alpha: 0.5);
       }
