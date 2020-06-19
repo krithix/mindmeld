@@ -32,10 +32,10 @@ nsp.on('connection', (socket) => {
     return randNum;
   }
 
-  function updateRoomData(socket, room) {
+  function updateRoomData(socket, room, fromFn) {
     if (currentRooms.indexOf(room) > -1) {
       var currentRoomData = roomData[room];
-      nsp.in(room).emit('updatedRoomData', currentRoomData);
+      nsp.in(room).emit('updatedRoomData', currentRoomData, fromFn);
     } else {
       console.log('trying to update room data for a nonexistent room!');
     }
@@ -61,8 +61,9 @@ nsp.on('connection', (socket) => {
       };
       currentRooms.push(room);
       roomData[room] = currentRoomData; 
+      updateRoomData(socket, room, 'join-new');  
     } 
-    updateRoomData(socket, room);   
+    updateRoomData(socket, room, 'join-existing');   
   });
 
   socket.on('nextGame', function(room) {
@@ -89,7 +90,7 @@ nsp.on('connection', (socket) => {
       };
 
       roomData[room] = updatedRoomData;
-      updateRoomData(socket, room);
+      updateRoomData(socket, room, 'nextGame');
     } else {
       console.log('trying to get next game in a nonexistent room!');
     }
@@ -113,7 +114,7 @@ nsp.on('connection', (socket) => {
       roomData[room][colorVar] += turnPoints;
       roomData[room].guess = guess;
       roomData[room].peek = true;
-      updateRoomData(socket, room);
+      updateRoomData(socket, room, 'guess');
     } else {
       console.log('trying to guess in nonexistent room');
     }

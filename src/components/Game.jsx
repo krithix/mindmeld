@@ -76,7 +76,7 @@ class Game extends React.Component {
 
     this.socket.emit('join', this.state.gameName);
 
-    this.socket.on('updatedRoomData', (data) => {
+    this.socket.on('updatedRoomData', (data, fromFn) => {
       this.setState(
         {
           pair: data.pair, 
@@ -84,13 +84,15 @@ class Game extends React.Component {
           turnPoints: data.turnPoints,
           bluePoints: data.bluePoints,
           redPoints: data.redPoints,
-          peek: data.peek,
           target: data.target,
           guess: data.guess,
           percent: 0,
           roomInit: data.roomInit
         }
       );
+      if (fromFn !== 'join-existing') {
+        this.setState({peek: data.peek});
+      }
       this.peek();
     });
 
