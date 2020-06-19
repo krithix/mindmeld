@@ -28,7 +28,7 @@ nsp.on('connection', (socket) => {
   }
 
   function generateTarget() {
-    var randNum = Math.floor(Math.random() * 100);
+    var randNum = Math.floor((Math.random() - 0.5) * 50);
     return randNum;
   }
 

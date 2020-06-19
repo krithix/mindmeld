@@ -9,8 +9,6 @@ import Index from './components/Index';
 import './App.scss';
 
 const appName = "Mindmeld";
-const appDescription = "A web implementation of the popular party game Wavelength to play online with family and friends.";
-const url = window.location.origin;
 const developer = 'krithix';
 const developerUrl = 'https://buymeacoff.ee/krithix';
 

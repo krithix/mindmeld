@@ -8,7 +8,7 @@ class Game extends React.Component {
 
     this.state = {
       pair: [null,null],
-      percent: 50,
+      percent: 0,
       target: 0,
       peek: false,
       gameName: window.location.pathname.replace('/', ''),
@@ -63,7 +63,7 @@ class Game extends React.Component {
 
   getNextPair(e) {
     e.preventDefault();
-    this.setState({peek: false, guess: null, percent: 50, roomInit: false});
+    this.setState({peek: false, guess: null, percent: 0, roomInit: false});
     this.socket.emit('nextGame', this.state.gameName);
   }
 
@@ -87,7 +87,7 @@ class Game extends React.Component {
           peek: data.peek,
           target: data.target,
           guess: data.guess,
-          percent: 50,
+          percent: 0,
           roomInit: data.roomInit
         }
       );
@@ -115,24 +115,32 @@ class Game extends React.Component {
         </div>
 
         <div>
+          {this.state.pair &&
+            <div className="pair">
+              <div className="left">&larr; {this.state.pair[0]}</div>
+              <div className="right">{this.state.pair[1]} &rarr;</div>
+            </div>
+          }
+
           <div className="target">
             {this.state.peek &&
               <div>
-                <div className="outer" style={{marginLeft: `${this.state.target - 10.5}%`}}></div>
-                <div className="middle" style={{marginLeft: `${this.state.target - 5.5}%`}}></div>
-                <div className="inner" style={{marginLeft: `${this.state.target - 2.5}%`}}></div>
+                <div className="outer" style={{marginLeft: `${50 + this.state.target - 10.75}%`}}></div>
+                <div className="middle" style={{marginLeft: `${50 + this.state.target - 5.75}%`}}></div>
+                <div className="inner" style={{marginLeft: `${50 + this.state.target - 2.75}%`}}></div>
               </div>
             }
-            <input type="range" min="1" max="100" value={this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
+            <input type="range" list="tickmarks" min="-50" step="1" max="50" value={this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
+          </div>
+
+          <div class="sliderticks">
+            <p>-50</p>
+            <p>-25</p>
+            <p>0</p>
+            <p>25</p>
+            <p>50</p>
           </div>
         </div>
-
-        {this.state.pair &&
-          <div className="pair">
-            <div className="left">&larr; {this.state.pair[0]}</div>
-            <div className="right">{this.state.pair[1]} &rarr;</div>
-          </div>
-        }
         
         <div className="buttons">
           <button className="guess" onClick={this.guess} disabled={false || this.state.guess || this.state.peek || !this.state.roomInit}>
