@@ -134,7 +134,7 @@ class Game extends React.Component {
             <input type="range" list="tickmarks" min="-50" step="1" max="50" value={!!this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
           </div>
 
-          <div class="sliderticks">
+          <div className="sliderticks">
             <p>-50</p>
             <p>-25</p>
             <p>0</p>
