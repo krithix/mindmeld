@@ -108,12 +108,11 @@ class Game extends React.Component {
           <div className="points">
             <span className="blue">{this.state.bluePoints}</span> — <span className="red">{this.state.redPoints}</span>
           </div>
-          {this.state.guess && 
+          {!!this.state.guess ? ( 
             <div className={`turn ${this.state.teamTurn}`}>{this.state.teamTurn} gets {this.state.turnPoints} points</div>
-          }
-          {!this.state.guess && 
+          ) : (
             <div className={`turn ${this.state.teamTurn}`}>{this.state.teamTurn}'s turn</div>
-          }
+          )}
         </div>
 
         <div>
@@ -132,7 +131,7 @@ class Game extends React.Component {
                 <div className="inner" style={{marginLeft: `${50 + this.state.target - 2.75}%`}}></div>
               </div>
             }
-            <input type="range" list="tickmarks" min="-50" step="1" max="50" value={this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
+            <input type="range" list="tickmarks" min="-50" step="1" max="50" value={!!this.state.guess? this.state.guess : this.state.percent} onChange={this.changePercent}  className="slider"/>
           </div>
 
           <div class="sliderticks">
@@ -145,13 +144,13 @@ class Game extends React.Component {
         </div>
         
         <div className="buttons">
-          <button className="guess" onClick={this.guess} disabled={false || this.state.guess || this.state.peek || !this.state.roomInit}>
-            Guess{this.state.guess && 'ed'} {this.state.guess? this.state.guess : this.state.percent}{this.state.guess && '!'}
+          <button className="guess" onClick={this.guess} disabled={false || !!this.state.guess || this.state.peek || !this.state.roomInit}>
+            Guess{!!this.state.guess && 'ed'} {!!this.state.guess? this.state.guess : this.state.percent}{!!this.state.guess && '!'}
           </button>
           <button className="next" onClick={this.getNextPair} disabled={!this.state.roomInit}>Next game</button>
         </div>
 
-        <div className={this.state.guess ? 'peek guessed' : 'peek'}>
+        <div className={!!this.state.guess ? 'peek guessed' : 'peek'}>
           <input id="peek" type="checkbox" className="peek" onChange={this.peek} defaultChecked={this.state.peek} />
           <p className="peek-label" onClick={this.peek}>Peek {this.state.peek && `(Target: ${this.state.target})`}</p>
         </div>
