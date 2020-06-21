@@ -43,9 +43,10 @@ nsp.on('connection', (socket) => {
 
   socket.on('join', function(room) {
     socket.join(room);
+    console.log('# of users in ' + room + ': ' + nsp.adapter.rooms[room].length);
     console.log(socket.id + ' joined ' + room);
     if (currentRooms.indexOf(room) < 0) {
-      console.log('initializing room ' + room + ' and adding ' + socket.id);
+      console.log('initializing room ' + room);
       var pair = generatePair([]);
       var currentRoomData = {
         pair: pairs[pair],
@@ -62,6 +63,7 @@ nsp.on('connection', (socket) => {
       currentRooms.push(room);
       roomData[room] = currentRoomData; 
       updateRoomData(socket, room, 'join-new');  
+      console.log('# of rooms: ' + currentRooms.length);
     } 
     updateRoomData(socket, room, 'join-existing');   
   });
