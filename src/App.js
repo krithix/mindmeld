@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route
 } from 'react-router-dom';
 import Game from './components/Game';
@@ -17,14 +17,11 @@ class App extends React.Component {
     return (
       <div>
         <Router>
-          <Switch>
-            <Route path="/:game">
-              <Game appName={appName} developer={developer} developerUrl={developerUrl} />
-            </Route>
-            <Route exact path="/">
-              <Index appName={appName} developer={developer} developerUrl={developerUrl} />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/:game" element={<Game appName={appName} developer={developer} developerUrl={developerUrl} />} />
+
+            <Route exact path="/" element={<Index appName={appName} developer={developer} developerUrl={developerUrl} />} />
+          </Routes>
         </Router>
       </div>
     )
